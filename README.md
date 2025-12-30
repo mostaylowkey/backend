@@ -64,7 +64,7 @@ The goal of this backend system was to design and implement a reliable applicati
 
   - Clear separation between logic layers
 
-  - Structured to allow:
+**Structured to allow:**
 
   - Database integration
 
