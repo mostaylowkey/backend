@@ -41,25 +41,46 @@ app.use(
     pinoHttp({
         logger,
         genReqId,
-        customSuccessMessage: (req, res) =>
-            `${req.method} ${req.url} -> ${res.statusCode}`,
-        customErrorMessage: (req, res, err) =>
-            `${req.method} ${req.url} -> ${res.statusCode || 500} ${err.message}`,
+        // Keep log shape consistent
+        customAttributeKeys: {
+            req: "req",
+            res: "res",
+            err: "err",
+            responseTime: "response_time_ms",
+        },
+        customLogLevel(req, res, err) {
+            if (err) return "error";
+            if (res.statusCode >= 500) return "error";
+            if (res.statusCode >= 400) return "warn";
+            return "info";
+        },
+        customSuccessMessage(req, res) {
+            return "request_completed";
+        },
+        customErrorMessage(req, res, err) {
+            return "request_failed";
+        },
         serializers: {
             req(req) {
                 return {
                     id: req.id,
                     method: req.method,
                     url: req.url,
+                    user_agent: req.headers["user-agent"],
+                    origin: req.headers.origin,
+                    ip: req.ip,
                 };
             },
             res(res) {
                 return {
-                    statusCode: res.statusCode,
+                    status_code: res.statusCode,
                 };
             },
         },
         autoLogging: true,
+        wrapSerializers: true,
+        // Ensure request_id is always present on log lines
+        customProps: (req) => ({ request_id: req.id }),
     })
 );
 
