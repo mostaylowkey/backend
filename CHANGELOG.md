@@ -1,6 +1,31 @@
 # Changelog
 All notable changes to this server will be documented here.
 
+## [V0.3.0] - 2026-01-05
+
+### Changed
+- Refactored product architecture to make Stripe the authoritative source of product details and pricing.
+- Enforced inventory-based product approval before exposing Stripe products to the frontend.
+- Standardized frontend–backend contract to use Stripe product IDs (`prod_*`) exclusively.
+- Improved checkout flow to ensure same-tab redirects and consistent success/cancel behavior.
+- Enhanced Stripe Checkout session creation with product metadata for clearer dashboard visibility.
+- Standardized frontend API base resolution for local development and production environments.
+- Separated shop listing and product detail styling into page-specific CSS for improved UX and maintainability.
+
+### Added
+- Authoritative product detail endpoint (`GET /products/:productId`) backed by Stripe and inventory validation.
+- Inventory approval gate to prevent unauthorized or inactive Stripe products from being sold.
+- Product metadata (Stripe product ID and name) attached to checkout sessions.
+- Dedicated `success.html` and `cancel.html` flows aligned with Stripe-hosted checkout behavior.
+- Page-specific CSS files for shop listing and product detail views.
+
+### Fixed
+- Stripe dashboard showing price-only entries without associated product context.
+- Frontend checkout opening unintended blank tabs.
+- Mismatch between frontend product identifiers and backend validation logic.
+- Product detail page failures caused by incorrect ID usage.
+- Confusion between hosted and embedded Stripe checkout behavior.
+
 ## [V0.2.0] - 2025-12-29
 
 ### Changed
