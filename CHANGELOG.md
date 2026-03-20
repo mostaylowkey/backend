@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this server will be documented here.
 
+## [V0.3.1] - 2026-03-20
+
+### Fixed
+- Product images not displaying: changed inventory schema from a single `image` string to an `images` array to match Stripe's product data structure.
+- Inconsistent API response shape between `GET /products` (list) and `GET /products/:productId` (detail): both endpoints now return the same normalized fields (`id`, `name`, `description`, `images`, `price`, `currency`).
+- `GET /products` now returns `id` (Stripe product ID) instead of exposing internal MongoDB `_id` and `stripeId` fields, aligning with the frontend's expected contract.
+
 ## [V0.3.0] - 2026-01-05
 
 ### Changed
