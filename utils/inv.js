@@ -8,7 +8,7 @@ const activeProductSchema = new mongoose.Schema({
     description: { type: String },
     price: { type: Number, required: true },
     currency: { type: String, default: "usd" },
-    image: { type: String },
+    images: { type: [String], default: [] },
     createdAt: { type: Date, default: Date.now },
 }, { collection: "inv" });
 
@@ -30,7 +30,7 @@ const createActiveInventory = async () => {
                 description: product.description,
                 price: price ? price.unit_amount : 0,
                 currency: price ? price.currency : "usd",
-                image: product.images[0] || null,
+                images: product.images || [],
             });
         }
 

@@ -10,13 +10,15 @@ const isStripeProductId = (id) => typeof id === "string" && id.startsWith("prod_
 router.get("/", async (req, res) => {
     try {
         const products = await InvProduct.find({});
-        // Optional: normalize id to stripeId if your frontend expects that
-        // const normalized = products.map((p) => ({
-        //   ...p.toObject(),
-        //   id: p.stripeId,
-        // }));
-        // return res.json(normalized);
-        res.json(products);
+        const normalized = products.map((p) => ({
+            id: p.stripeId,
+            name: p.name,
+            description: p.description,
+            images: p.images,
+            price: p.price,
+            currency: p.currency,
+        }));
+        res.json(normalized);
     } catch (err) {
         req.log?.error({ err, request_id: req.id }, "Error fetching products from inv");
         res
